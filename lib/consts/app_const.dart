@@ -1,5 +1,5 @@
 class AppConst {
-  static const String appName = "TaskManageMent App";
+  static const String appName = "TaskManager App";
   static const String search = "Search Tasks";
   static const String taskName = "Task Name";
   static const String taskDetail = "Task Deatil";

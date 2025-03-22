@@ -33,8 +33,11 @@ class _AddTaskScreenState extends State<AddTaskScreen> {
         child: SingleChildScrollView(
           child: Column(
             children: [
-              Image.asset(ImageConstant.createTaks),
               60.vs,
+              ClipRRect(
+                borderRadius: BorderRadius.circular(200),
+                child: Image.asset(ImageConstant.createTaks,)),
+              10.vs,
               CustomText(
                 Get.arguments == null
                     ? AppConst.addNewTask

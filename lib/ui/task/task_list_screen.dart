@@ -24,6 +24,9 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final double screenHeight = MediaQuery.of(context).size.height;
+    final double screenWidth = MediaQuery.of(context).size.width;
+
     return Scaffold(
       backgroundColor: AppColorConsts.appBackgroundColor,
       floatingActionButton: FloatingActionButton.extended(
@@ -45,74 +48,109 @@ class _TaskListScreenState extends State<TaskListScreen> {
           color: AppColorConsts.whiteColor,
         ),
       ),
-      body: Column(children: [
-        50.vs,
-        AppTextField1(
-          isRequired: false,
-          hint: AppConst.search,
-          prefix: const Icon(Icons.search).paddingSymmetric(horizontal: 20),
-          borderRadius: BorderRadius.circular(10),
-          fillColor: AppColorConsts.whiteColor,
-          fontSize: 16,
-          isshadow: true,
-          onChanged: (value) {
-            taskController.searchtask(value);
-          },
-          borderColor: AppColorConsts.transparentColor,
-          labelTextStyle: AppTextStyle.medium12TextStyle.copyWith(
-            color: AppColorConsts.greyColor1,
-          ),
-        ).paddingSymmetric(horizontal: 20),
-        Obx(
-          () => Expanded(
-            child: RefreshIndicator(
-              onRefresh: () async {
-                await taskController.getallTask();
-                
-
-
-                
-              },
-              child: taskController.loadingTaskList.value
-                  ? const Center(child: CircularProgressIndicator())
-                  : !taskController.loadingTaskList.value &&
-                          taskController.searchTasklist.isEmpty
-                      ? const NoDataFound(text: "No task Found")
-                      : Obx(
-                          () => ListView.builder(
-                            padding: const EdgeInsets.symmetric(horizontal: 15),
-                            itemCount: taskController.searchTasklist.length,
-                            itemBuilder: (context, index) {
-                              final task = taskController.searchTasklist[index];
-                              return TaskCard(
-                                title: task.taskName,
-                                description: task.taskDetails,
-                                date: task.createdDate
-                                    .formatDate(outFormat: 'yyyy-mm-dd hh:mm a')
-                                    .toString(),
-                                isCompleted: task.isFavourite,
-                              ).paddingOnly(bottom: 10).onTap(() {
-                                Get.delete<TaskController>();
-                                Get.toNamed(RouteConst.addTaskScreen,
-                                        arguments: {
-                                      "id": task.taskId,
-                                      "taskName": task.taskName,
-                                      "taskDetails": task.taskDetails,
-                                      "isfav":task.isFavourite
-                                    })!
-                                    .then((value) {
-                                  if (value == true) {
-                                    taskController.getallTask();
-                                  }
-                                });
-                              });
-                            },
-                          ).paddingOnly(bottom: 80),
-                        ),
+      body: RefreshIndicator(
+        onRefresh: () async {
+          await taskController.getallTask();
+        },
+        child: CustomScrollView(
+          slivers: [
+            /// **🔹 Sliver App Bar with Title & Search**
+            SliverAppBar(
+              pinned: true,
+              floating: true,
+              expandedHeight: screenHeight * 0.2,
+              backgroundColor: AppColorConsts.primaryColor,
+              flexibleSpace: FlexibleSpaceBar(
+                titlePadding:const EdgeInsets.only(left: 20, bottom: 15),
+                title: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    CustomText(
+                      AppConst.appName,
+                      style: AppTextStyle.bold18TextStyle.copyWith(
+                        color: AppColorConsts.whiteColor,
+                      ),
+                    ),
+                    50.vs,
+                  ],
+                ),
+              ),
+              bottom: PreferredSize(
+                preferredSize: const Size.fromHeight(80),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  child: AppTextField1(
+                    isRequired: false,
+                    hint: AppConst.search,
+                    prefix: const Icon(Icons.search)
+                        .paddingSymmetric(horizontal: 15),
+                    borderRadius: BorderRadius.circular(10),
+                    fillColor: AppColorConsts.whiteColor,
+                    fontSize: 16,
+                    isshadow: true,
+                    onChanged: (value) {
+                      taskController.searchtask(value);
+                    },
+                    borderColor: AppColorConsts.transparentColor,
+                    labelTextStyle: AppTextStyle.medium12TextStyle.copyWith(
+                      color: AppColorConsts.greyColor1,
+                    ),
+                  ),
+                ),
+              ),
             ),
-          ),
+
+            /// **🔹 Task List (SliverList)**
+            Obx(() {
+              if (taskController.loadingTaskList.value) {
+                return const SliverFillRemaining(
+                  child: Center(child: CircularProgressIndicator()),
+                );
+              }
+
+              if (taskController.searchTasklist.isEmpty) {
+                return const SliverFillRemaining(
+                  child: Center(child: NoDataFound(text: "No task Found")),
+                );
+              }
+
+              return SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                sliver: SliverList(
+                  delegate: SliverChildBuilderDelegate(
+                    (context, index) {
+                      final task = taskController.searchTasklist[index];
+                      return TaskCard(
+                        title: task.taskName,
+                        description: task.taskDetails,
+                        date: task.createdDate
+                            .formatDate(outFormat: 'yyyy-MM-dd hh:mm a')
+                            .toString(),
+                        isCompleted: task.isFavourite,
+                      ).paddingOnly(bottom: 10).onTap(() {
+                        Get.delete<TaskController>();
+                        Get.toNamed(RouteConst.addTaskScreen, arguments: {
+                          "id": task.taskId,
+                          "taskName": task.taskName,
+                          "taskDetails": task.taskDetails,
+                          "isfav": task.isFavourite,
+                        })!
+                            .then((value) {
+                          if (value == true) {
+                            taskController.getallTask();
+                          }
+                        });
+                      });
+                    },
+                    childCount: taskController.searchTasklist.length,
+                  ),
+                ),
+              );
+            }),
+          ],
         ),
-      ]),
+      ),
     );
   }
 }
