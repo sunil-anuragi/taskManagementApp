@@ -130,6 +130,7 @@ class ApiHandler {
         },
       );
       return response;
+    // ignore: unused_catch_clause
     } on SocketException catch (e) {
       return http.Response(
           errorModelToJson(ErrorModel(

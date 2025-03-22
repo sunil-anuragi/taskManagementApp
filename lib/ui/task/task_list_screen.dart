@@ -25,7 +25,6 @@ class _TaskListScreenState extends State<TaskListScreen> {
   @override
   Widget build(BuildContext context) {
     final double screenHeight = MediaQuery.of(context).size.height;
-    final double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: AppColorConsts.appBackgroundColor,
@@ -54,14 +53,13 @@ class _TaskListScreenState extends State<TaskListScreen> {
         },
         child: CustomScrollView(
           slivers: [
-            /// **🔹 Sliver App Bar with Title & Search**
             SliverAppBar(
               pinned: true,
               floating: true,
               expandedHeight: screenHeight * 0.2,
               backgroundColor: AppColorConsts.primaryColor,
               flexibleSpace: FlexibleSpaceBar(
-                titlePadding:const EdgeInsets.only(left: 20, bottom: 15),
+                titlePadding: const EdgeInsets.only(left: 20, bottom: 15),
                 title: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -100,8 +98,6 @@ class _TaskListScreenState extends State<TaskListScreen> {
                 ),
               ),
             ),
-
-            /// **🔹 Task List (SliverList)**
             Obx(() {
               if (taskController.loadingTaskList.value) {
                 return const SliverFillRemaining(
@@ -111,7 +107,7 @@ class _TaskListScreenState extends State<TaskListScreen> {
 
               if (taskController.searchTasklist.isEmpty) {
                 return const SliverFillRemaining(
-                  child: Center(child: NoDataFound(text: "No task Found")),
+                  child: Center(child: NoDataFound(text: AppConst.notaskFound)),
                 );
               }
 
