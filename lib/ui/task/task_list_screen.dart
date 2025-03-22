@@ -68,6 +68,10 @@ class _TaskListScreenState extends State<TaskListScreen> {
             child: RefreshIndicator(
               onRefresh: () async {
                 await taskController.getallTask();
+                
+
+
+                
               },
               child: taskController.loadingTaskList.value
                   ? const Center(child: CircularProgressIndicator())
