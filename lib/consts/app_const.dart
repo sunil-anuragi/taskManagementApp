@@ -10,31 +10,6 @@ class AppConst {
   static const String updatehereTask =  "Update Task here...!";
   static const String please =  "Please ";
   static const String enter =  "Enter ";
-
-
-  /// Gender
-  static const String male = "MALE";
-  static const String female = "FEMALE";
   static const String islogin = "islogin";
-  List<Map<String, dynamic>> educationDataList = [
-    {"id": 0, "name": "10th Pass", "isSelected": false},
-    {"id": 1, "name": "12th Pass", "isSelected": false},
-    {"id": 2, "name": "B.A.", "isSelected": false},
-    {"id": 3, "name": "BCA", "isSelected": false},
-    {"id": 4, "name": "MBBS", "isSelected": false},
-    {"id": 5, "name": "B.Tech", "isSelected": false},
-  ];
-  final List<String> genders = ['male', 'female', 'others'];
-
-  ///URLs
-
-  static const String termsAndConditions =
-      "";
-  static const String privacyAndPolicy =
-      "https://www.examopd.com/privacy-policy";
-
-
-  //Order const
-
-  
-}
+  static const String notaskFound = "No task Found";
+ }

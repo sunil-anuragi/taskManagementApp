@@ -1,6 +1,6 @@
 class ValidationKey {
   static const String emailKey = "Email ID";
-   static const String numberKey = "first name";
+  static const String numberKey = "first name";
   static const String mobileNumberKey = "Mobile Number";
   static const String firstName = "First Name";
   static const String lastName = "Last Name";
